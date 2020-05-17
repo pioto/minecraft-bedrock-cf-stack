@@ -75,8 +75,10 @@ Resources:
           runcmd:
            - [ curl, -o, /var/tmp/bedrock-server.zip, 'https://minecraft.azureedge.net/bin-linux/bedrock-server-${ServerVersion}.zip' ]
            - [ mkdir, /home/ubuntu/bedrock-server ]
-           - [ cd,  /home/ubuntu/bedrock-server ]
+           - [ cd, /home/ubuntu/bedrock-server ]
            - [ unzip, /var/tmp/bedrock-server.zip ]
+           - [ chown, '-R', 'ubuntu:ubuntu', /home/ubuntu/bedrock-server ]
+           - [ runuser, '-u', ubuntu, '--', tmux, '-c', 'LD_LIBRARY_PATH=. ./bedrock_server' ]
 Outputs:
   PublicName:
     Value: !GetAtt VM.PublicDnsName
