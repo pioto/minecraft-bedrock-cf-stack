@@ -79,6 +79,24 @@ Resources:
            - [ unzip, /var/tmp/bedrock-server.zip ]
            - [ chown, '-R', 'ubuntu:ubuntu', /home/ubuntu/bedrock-server ]
            - [ runuser, '-u', ubuntu, '--', tmux, '-c', 'LD_LIBRARY_PATH=. ./bedrock_server' ]
+      Tags:
+        - Key: Scheduler
+          Value: MinecraftHours
+  MinecraftHours:
+    Type: Custom::ServiceInstanceSchedule
+    Properties:
+      Name: MinecraftHours
+      NoStackPrefix: 'True'
+      Description: 'Minecraft play hours'
+      ServiceToken: >-
+        arn:aws:lambda:us-east-2:434024850707:function:instance-scheduler-InstanceSchedulerMain
+      Enforced: 'True'
+      Timezone: US/Eastern
+      Periods:
+        - Description: Gaming hours
+          BeginTime: '08:00'
+          EndTime: '20:00'
+          WeekDays: '0-6'
 Outputs:
   PublicName:
     Value: !GetAtt VM.PublicDnsName
