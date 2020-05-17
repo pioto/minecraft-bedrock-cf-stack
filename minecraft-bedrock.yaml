@@ -1,0 +1,68 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Metadata:
+  License: Apache-2.0
+Description: 'Minecraft Bedrock Server'
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  ServerVersion:
+    Description: The version of the Minecraft Bedrock Server to install
+    Type: String
+    ConstraintDescription: must be a valid Minecraft server version
+    Default: '1.14.60.5'
+  VPC:
+    Description: 'Pick the VPC to run in, usually the "default" one'
+    Type: AWS::EC2::VPC::Id
+  Subnet:
+    Description: 'Pick the subnet to run in'
+    Type: AWS::EC2::Subnet::Id
+  InstanceType:
+    Description: The EC2 instance type for the server
+    Type: String
+    ConstraintDescription: must be a valid EC2 instance type
+    Default: t3a.micro
+Mappings:
+  # ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20200430
+  # example CLI command to get these IDs, for each region:
+  #   aws ec2 describe-images --filters "Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20200430" --query "Images[0].ImageId" --output text --region us-west-1
+  RegionMap:
+    us-east-1:
+      AMI: ami-05801d0a3c8e4c443
+    us-east-2:
+      AMI: ami-0a040c35ca945058a
+    us-west-1:
+      AMI: ami-0365b50e7a63e3bf1
+    us-west-2:
+      AMI: ami-06ffade19910cbfc0
+Resources:
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Minecraft Bedrock Server Security Group
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+      - CidrIp: 0.0.0.0/0
+        Description: Minecraft Bedrock Server
+        FromPort: 19132
+        IpProtocol: udp
+        ToPort: 19132
+      - CidrIp: 0.0.0.0/0
+        Description: SSH
+        FromPort: 22
+        IpProtocol: tcp
+        ToPort: 22
+  VM:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !FindInMap [RegionMap, !Ref AWS::Region, AMI]
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyName
+      SecurityGroupIds: [!Ref SecurityGroup]
+      SubnetId: !Ref Subnet
+Output:
+  PublicName:
+    Value: !GetAtt VM.PublicDnsName
+    Description: Public Name (connect via SSH as user ec2-user)
