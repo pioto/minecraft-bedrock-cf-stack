@@ -62,6 +62,21 @@ Resources:
       KeyName: !Ref KeyName
       SecurityGroupIds: [!Ref SecurityGroup]
       SubnetId: !Ref Subnet
+      UserData:
+        Fn::Base64: !Sub |
+          #cloud-config
+          repo_update: true
+          repo_upgrade: all
+
+          packages:
+           - tmux
+           - unzip
+          
+          runcmd:
+           - [ curl, -o, /var/tmp/bedrock-server.zip, 'https://minecraft.azureedge.net/bin-linux/bedrock-server-${ServerVersion}.zip' ]
+           - [ mkdir, /home/ubuntu/bedrock-server ]
+           - [ cd,  /home/ubuntu/bedrock-server ]
+           - [ unzip, /var/tmp/bedrock-server.zip ]
 Outputs:
   PublicName:
     Value: !GetAtt VM.PublicDnsName
