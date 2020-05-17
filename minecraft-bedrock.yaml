@@ -57,12 +57,12 @@ Resources:
   VM:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: !FindInMap [RegionMap, !Ref AWS::Region, AMI]
+      ImageId: !FindInMap [RegionMap, !Ref 'AWS::Region', AMI]
       InstanceType: !Ref InstanceType
       KeyName: !Ref KeyName
       SecurityGroupIds: [!Ref SecurityGroup]
       SubnetId: !Ref Subnet
-Output:
+Outputs:
   PublicName:
     Value: !GetAtt VM.PublicDnsName
     Description: Public Name (connect via SSH as user ec2-user)
