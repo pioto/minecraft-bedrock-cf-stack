@@ -80,9 +80,11 @@ Resources:
               tmux: []
               unzip: []
           groups:
-            minecraft: {}
+            minecraft:
+              gid: 900
           users:
             minecraft:
+              uid: 900
               groups:
                 - minecraft
               homeDir: /opt/minecraft/bedrock-server
