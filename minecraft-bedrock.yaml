@@ -79,14 +79,10 @@ Resources:
             apt:
               tmux: []
               unzip: []
-          groups:
-            minecraft:
-              gid: 900
           users:
             minecraft:
-              uid: 900
-              groups:
-                - minecraft
+              groups: []
+              uid: '900'
               homeDir: /opt/minecraft/bedrock-server
           sources:
             /opt/minecraft/bedrock-server: !Sub 'https://minecraft.azureedge.net/bin-linux/bedrock-server-${ServerVersion}.zip'
