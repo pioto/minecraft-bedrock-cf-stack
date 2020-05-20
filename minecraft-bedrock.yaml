@@ -99,7 +99,7 @@ Resources:
           wget https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
           python /usr/lib/python2.7/dist-packages/easy_install.py --script-dir /opt/aws/bin aws-cfn-bootstrap-latest.tar.gz
           /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource VM --region ${AWS::Region}
-          /opt/aws/bin/cfn-signal -e $? -v --stack ${AWS::StackName} --resource VM --region ${AWS::Region}
+          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource VM --region ${AWS::Region}
       Tags:
         - Key: Scheduler
           Value: MinecraftHours
