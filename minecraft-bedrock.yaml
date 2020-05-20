@@ -54,18 +54,6 @@ Resources:
         FromPort: 22
         IpProtocol: tcp
         ToPort: 22
-  ServerVolume:
-    Type: AWS::EC2::Volume
-    Properties:
-      AvailabilityZone: !GetAtt VM.AvailabilityZone
-      Size: 8 # GiB
-    DeletionPolicy: Snapshot
-  ServerVolumeMount:
-    Type: AWS::EC2::VolumeAttachment
-    Properties:
-      InstanceId: !Ref VM
-      VolumeId: !Ref ServerVolume
-      Device: /dev/sdd
   VM:
     Type: AWS::EC2::Instance
     CreationPolicy:
@@ -90,6 +78,10 @@ Resources:
             01_chown_server_files:
               command: ['chown', '-R', 'minecraft:minecraft', '/opt/minecraft/bedrock-server']
     Properties:
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 16
       ImageId: !FindInMap [RegionMap, !Ref 'AWS::Region', AMI]
       InstanceType: !Ref InstanceType
       KeyName: !Ref KeyName
