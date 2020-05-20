@@ -60,12 +60,6 @@ Resources:
       AvailabilityZone: !GetAtt VM.AvailabilityZone
       Size: 8 # GiB
     DeletionPolicy: Snapshot
-  ServerVolumeMount:
-    Type: AWS::EC2::VolumeAttachment
-    Properties:
-      InstanceId: !Ref VM
-      VolumeId: !Ref ServerVolume
-      Device: /dev/sdd
   VM:
     Type: AWS::EC2::Instance
     CreationPolicy:
@@ -97,6 +91,9 @@ Resources:
       KeyName: !Ref KeyName
       SecurityGroupIds: [!Ref SecurityGroup]
       SubnetId: !Ref Subnet
+      Volumes:
+        - Device: /dev/sdd
+          VolumeId: !Ref ServerVolume
       # TODO need to edit the server.properties file, and whitelist.json
       UserData:
         Fn::Base64: !Sub |
