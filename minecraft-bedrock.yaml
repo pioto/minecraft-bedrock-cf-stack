@@ -88,7 +88,7 @@ Resources:
             /opt/minecraft/bedrock-server: !Sub 'https://minecraft.azureedge.net/bin-linux/bedrock-server-${ServerVersion}.zip'
           commands:
             01_chown_server_files:
-              command: ['chown', '-R', 'minecraft:minecraft', '/opt/minecraft-bedrock-server']
+              command: ['chown', '-R', 'minecraft:minecraft', '/opt/minecraft/bedrock-server']
     Properties:
       ImageId: !FindInMap [RegionMap, !Ref 'AWS::Region', AMI]
       InstanceType: !Ref InstanceType
