@@ -24,9 +24,9 @@ Parameters:
     Type: String
     ConstraintDescription: must be a valid EC2 instance type
     Default: t3a.micro
-  HostedZone:
-    Description: The Route 53 Hosted Zone to add a record to
-    Type: AWS::Route53::HostedZone::Id
+  HostedZoneName:
+    Description: The Route 53 Hosted Zone to add a record to, by name (e.g. "example.com")
+    Type: String
     ConstraintDescription: Must be a valid Route 53 Hosted Zone
   DNSName:
     Description: The short dns name for the record to add to Route 53
@@ -134,8 +134,8 @@ Resources:
   RecordSet:
     Type: AWS::Route53::RecordSet
     Properties:
-      HostedZoneId: !Ref HostedZone
-      Name: !Ref DNSName
+      HostedZoneName: !Ref HostedZoneName
+      Name: !Join ['.', [!Ref DNSName, !Ref HostedZoneName]]
       Type: A
       TTL: 60
       ResourceRecords:
