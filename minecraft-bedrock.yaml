@@ -115,7 +115,7 @@ Resources:
       NoStackPrefix: 'True'
       Description: 'Minecraft play hours'
       ServiceToken: !Sub >-
-        arn:aws:lambda:us-east-2:${AWS::AccountId}:function:instance-scheduler-InstanceSchedulerMain
+        arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:instance-scheduler-InstanceSchedulerMain
       Enforced: 'True'
       Timezone: US/Eastern
       Periods:
