@@ -24,14 +24,14 @@ Parameters:
     Type: String
     ConstraintDescription: must be a valid EC2 instance type
     Default: t3a.micro
-  HostedZoneName:
-    Description: The Route 53 Hosted Zone to add a record to, by name (e.g. "example.com")
-    Type: String
+  HostedZone:
+    Description: The Route 53 Hosted Zone to add a record to
+    Type: AWS::Route53::HostedZone::Id
     ConstraintDescription: Must be a valid Route 53 Hosted Zone
   DNSName:
-    Description: The short dns name for the record to add to Route 53
+    Description: The fully qualified DNS name for the record to add to Route 53
     Type: String
-    Default: minecraft
+    Default: minecraft.example.com
 Mappings:
   # ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20200430
   # example CLI command to get these IDs, for each region:
@@ -134,8 +134,8 @@ Resources:
   RecordSet:
     Type: AWS::Route53::RecordSet
     Properties:
-      HostedZoneName: !Ref HostedZoneName
-      Name: !Join ['.', [!Ref DNSName, !Ref HostedZoneName]]
+      HostedZoneId: !Ref HostedZone
+      Name: !Ref DNSName
       Type: A
       TTL: 60
       ResourceRecords:
