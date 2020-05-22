@@ -137,6 +137,7 @@ Resources:
       HostedZoneId: !Ref HostedZone
       Name: !Ref DNSName
       Type: A
+      TTL: 60
       ResourceRecords:
         - !GetAtt VM.PublicIp
 Outputs:
