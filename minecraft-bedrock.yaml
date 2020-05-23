@@ -115,6 +115,9 @@ Resources:
                 User=minecraft
                 ExecStart=/usr/local/bin/minecraft-start
                 ExecStop=/usr/local/bin/minecraft-stop
+
+                [Install]
+                WantedBy=multi-user.target
               mode: '000644'
               owner: 'root'
               group: 'root'
