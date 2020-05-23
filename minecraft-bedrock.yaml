@@ -92,7 +92,7 @@ Resources:
               content: |
                 #!/bin/bash
                 cd /opt/minecraft/bedrock-server
-                tmux new-session -d -s 'minecraft env LD_LIBRARY_PATH=. ./bedrock_server ; tmux -s minecraft wait-for -S minecraft-exited'
+                tmux new-session -d -s minecraft 'env LD_LIBRARY_PATH=. ./bedrock_server ; tmux -s minecraft wait-for -S minecraft-exited'
               mode: '000755'
               owner: 'root'
               group: 'root'
@@ -123,10 +123,6 @@ Resources:
               command: ['chown', '-R', 'minecraft:minecraft', '/opt/minecraft/bedrock-server']
             02_systemd_reload:
               command: [systemctl, daemon-reload]
-            03_systemd_service_enable:
-              command: [systemctl, enable, minecraft-bedrock-server.service]
-            04_systemd_service_start:
-              command: [systemctl, start, minecraft-bedrock-server.service]
     Properties:
       BlockDeviceMappings:
         - DeviceName: /dev/sda1
