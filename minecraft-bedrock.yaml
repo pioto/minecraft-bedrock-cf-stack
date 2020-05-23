@@ -87,9 +87,46 @@ Resources:
               homeDir: /opt/minecraft/bedrock-server
           sources:
             /opt/minecraft/bedrock-server: !Sub 'https://minecraft.azureedge.net/bin-linux/bedrock-server-${ServerVersion}.zip'
+          files:
+            /usr/local/bin/minecraft-start:
+              content: |
+                #!/bin/bash
+                cd /opt/minecraft/bedrock-server
+                tmux new-session -d -s 'minecraft env LD_LIBRARY_PATH=. ./bedrock_server ; tmux -s minecraft wait-for -S minecraft-exited'
+              mode: '000755'
+              owner: 'root'
+              group: 'root'
+            /usr/local/bin/minecraft-stop:
+              content: |
+                #!/bin/bash
+                tmux -s minecraft send-keys -t :0 'stop' 'C-m' \; wait-for minecraft-exited
+              mode: '000755'
+              owner: 'root'
+              group: 'root'
+            /etc/systemd/system/minecraft-bedrock-server.service:
+              content: |
+                [Unit]
+                Description=Minecraft Bedrock Server
+                Documentation=https://help.minecraft.net/hc/en-us/articles/360035131651-Dedicated-Servers-for-Minecraft-on-Bedrock-
+                After=network.target
+
+                [Service]
+                Type=forking
+                User=minecraft
+                ExecStart=/usr/local/bin/minecraft-start
+                ExecStop=/usr/local/bin/minecraft-stop
+              mode: '000644'
+              owner: 'root'
+              group: 'root'
           commands:
             01_chown_server_files:
               command: ['chown', '-R', 'minecraft:minecraft', '/opt/minecraft/bedrock-server']
+            02_systemd_reload:
+              command: [systemctl, daemon-reload]
+            03_systemd_service_enable:
+              command: [systemctl, enable, minecraft-bedrock-server.service]
+            04_systemd_service_start:
+              command: [systemctl, start, minecraft-bedrock-server.service]
     Properties:
       BlockDeviceMappings:
         - DeviceName: /dev/sda1
