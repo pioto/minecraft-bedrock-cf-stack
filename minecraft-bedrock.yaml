@@ -100,7 +100,9 @@ Resources:
               content: |
                 #!/bin/bash
                 tmux send-keys -t minecraft:0 'stop' 'C-m'
-                sleep 5
+                while tmux has-session -t minecraft 2>/dev/null ; do
+                  sleep 1
+                done
               mode: '000755'
               owner: 'root'
               group: 'root'
