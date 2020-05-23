@@ -92,7 +92,7 @@ Resources:
               content: |
                 #!/bin/bash
                 cd /opt/minecraft/bedrock-server
-                tmux new-session -d -s minecraft 'env LD_LIBRARY_PATH=. ./bedrock_server ; tmux -s minecraft wait-for -S minecraft-exited'
+                tmux new-session -d -s minecraft 'env LD_LIBRARY_PATH=. ./bedrock_server ; tmux wait-for -S minecraft-exited'
               mode: '000755'
               owner: 'root'
               group: 'root'
