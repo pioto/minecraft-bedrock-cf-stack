@@ -92,14 +92,15 @@ Resources:
               content: |
                 #!/bin/bash
                 cd /opt/minecraft/bedrock-server
-                tmux new-session -d -s minecraft 'env LD_LIBRARY_PATH=. ./bedrock_server ; tmux wait-for -S minecraft-exited'
+                tmux new-session -d -s minecraft 'env LD_LIBRARY_PATH=. ./bedrock_server'
               mode: '000755'
               owner: 'root'
               group: 'root'
             /usr/local/bin/minecraft-stop:
               content: |
                 #!/bin/bash
-                tmux -s minecraft send-keys -t :0 'stop' 'C-m' \; wait-for minecraft-exited
+                tmux send-keys -t minecraft:0 'stop' 'C-m'
+                sleep 5
               mode: '000755'
               owner: 'root'
               group: 'root'
