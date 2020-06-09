@@ -155,6 +155,8 @@ Resources:
       Tags:
         - Key: Schedule
           Value: MinecraftHours
+        - Key: Backups
+          Value: daily-35days
   MinecraftHours:
     Type: Custom::ServiceInstanceSchedule
     Properties:
